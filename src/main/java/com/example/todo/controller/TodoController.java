@@ -1,37 +1,41 @@
 package com.example.todo.controller;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
-import com.example.todo.service.TodoJpaService;
 import com.example.todo.model.Todo;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.todo.service.TodoJpaService;
 
-
-@RestController 
+@RestController
 public class TodoController{
-    @Autowired 
-    private TodoJpaService todoService;
+
+    @Autowired
+    public TodoJpaService todoService;
 
     @GetMapping("/todos")
-    public ArrayList<Todo> getAllTodos(){
-        return todoService.getAllTodos();
+    public ArrayList<Todo> getTodos(){
+        return todoService.getTodos();
     }
 
-    @GetMapping("/todos/{id}")
-    public Todo getTodoById(@PathVariable("id") int id){
-        return todoService.getTodoById(id);
+    @GetMapping("/todos/{todoId}")
+    public Todo getTodoById(@PathVariable("todoId") int todoId){
+        return todoService.getTodoById(todoId);
     }
 
-    @PostMapping("/todos") 
+    @PostMapping("/todos")
     public Todo addTodo(@RequestBody Todo todo){
         return todoService.addTodo(todo);
     }
 
-    @PutMapping("/todos/{id}") 
-    public Todo updateTodo(@PathVariable int id,@RequestBody Todo todo){
-        return todoService.updateTodo(id,todo); 
+    @PutMapping("/todos/{todoId}")
+    public Todo updateTodo(@PathVariable("todoId") int todoId,@RequestBody Todo todo){
+        return todoService.updateTodo(todoId, todo);
     }
-    @DeleteMapping("/todos/{id}")
-    public void deleteTodo(@PathVariable int id){
-        todoService.deleteTodo(id);
+
+    @DeleteMapping("/todos/{todoId}")
+    public void deleteTodo(@PathVariable("todoId") int todoId){
+        todoService.deleteTodo(todoId);
     }
+
 }

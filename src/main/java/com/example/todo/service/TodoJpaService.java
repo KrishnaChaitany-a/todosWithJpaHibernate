@@ -1,4 +1,5 @@
 package com.example.todo.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -7,46 +8,47 @@ import java.util.*;
 import com.example.todo.repository.*;
 import com.example.todo.model.Todo;
 
-@Service 
+@Service
 public class TodoJpaService implements TodoRepository{
     @Autowired
     private TodoJpaRepository todoJpaRepository;
-
-    @Override 
-    public ArrayList<Todo> getAllTodos(){
+    
+    @Override
+    public ArrayList<Todo> getTodos(){
         List<Todo> todoList = todoJpaRepository.findAll();
         ArrayList<Todo> todos = new ArrayList<>(todoList);
         return todos;
     }
 
-    @Override 
-    public Todo getTodoById(int id){
+    @Override
+    public Todo getTodoById(int todoId){
         try{
-            Todo todo = todoJpaRepository.findById(id).get();
+            Todo todo = todoJpaRepository.findById(todoId).get();
             return todo;
-        }catch(Exception e){
+        }
+        catch(Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
-    @Override 
+    @Override
     public Todo addTodo(Todo todo){
         todoJpaRepository.save(todo);
         return todo;
     }
 
     @Override
-    public Todo updateTodo(int id,Todo todo){
-        Todo newTodo = todoJpaRepository.findById(id).get();
+    public Todo updateTodo(int todoId, Todo todo){
         try{
-            if(newTodo.getTodo() != null){
+            Todo newTodo = todoJpaRepository.findById(todoId).get();
+            if(todo.getTodo() != null){
                 newTodo.setTodo(todo.getTodo());
             }
-            if(newTodo.getStatus() != null){
-                newTodo.setStatus(todo.getStatus());
-            }
-            if(newTodo.getPriority() != null){
+            if(todo.getPriority() != null){
                 newTodo.setPriority(todo.getPriority());
+            }
+            if(todo.getStatus() != null){
+                newTodo.setStatus(todo.getStatus());
             }
             todoJpaRepository.save(newTodo);
             return newTodo;
@@ -56,12 +58,13 @@ public class TodoJpaService implements TodoRepository{
         }
     }
 
-    @Override 
-    public void deleteTodo(int id){
-        try{
-            todoJpaRepository.deleteById(id);
-        }catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    @Override
+    public void deleteTodo(int todoId){
+        try {
+            todoJpaRepository.deleteById(todoId);
+        } catch (Exception e) {    
+           throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+       }
     }
+
 }
